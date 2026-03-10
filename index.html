@@ -179,6 +179,7 @@ box-shadow:0 4px 10px rgba(0,0,0,0.4);
 <input type="number" id="count" value="5" min="2" max="20">
 
 <button onclick="createBoxes()">Tạo</button>
+<button onclick="resetBoxes()">Reset</button>
 
 </div>
 
@@ -207,6 +208,22 @@ const inputBox=document.getElementById("inputBox")
 const avgBox=document.getElementById("avg")
 const stateBox=document.getElementById("state")
 const logBox=document.getElementById("log")
+
+
+const STORAGE_KEY="history_log"
+
+/* load khi mở trang */
+let saved = localStorage.getItem(STORAGE_KEY)
+if(saved){
+logBox.value = saved
+}
+
+/* lưu mỗi khi thay đổi */
+logBox.addEventListener("input",function(){
+localStorage.setItem(STORAGE_KEY,this.value)
+})
+
+
 
 function createBoxes(){
 
@@ -256,6 +273,7 @@ boxes[boxes.length-1].value=v
 
 if(removed!=""){
 logBox.value+=removed
+localStorage.setItem(STORAGE_KEY,logBox.value)
 }
 
 let filled = boxes.every(b => b.value !== "")
@@ -298,6 +316,22 @@ this.value=""
 this.focus()
 
 })
+
+function resetBoxes(){
+
+boxes.forEach(b=>{
+b.value=""
+})
+
+avgBox.value=""
+stateBox.value=""
+stateBox.classList.remove("lon","nho")
+
+inputBox.focus()
+
+}
+
+
 
 </script>
 

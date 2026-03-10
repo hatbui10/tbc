@@ -82,6 +82,7 @@ opacity:0.8;
 margin-bottom:6px;
 }
 
+
 </style>
 </head>
 
@@ -102,6 +103,7 @@ margin-bottom:6px;
 <div class="row">
 <input id="o6" maxlength="1" autocomplete="off">
 <input id="kq" class="result" readonly placeholder="TB">
+<input id="state" class="state" readonly>
 </div>
 
 <div class="label">Dãy số đã rời khỏi ô1</div>
@@ -121,6 +123,7 @@ document.getElementById("o5")
 
 const input6=document.getElementById("o6")
 const result=document.getElementById("kq")
+const state=document.getElementById("state")
 const logBox=document.getElementById("log")
 
 window.onload=()=>{
@@ -158,7 +161,18 @@ count++
 }
 })
 
-result.value=count?(sum/count).toFixed(2):""
+let avg = count ? (sum/count) : 0
+
+result.value = count ? avg.toFixed(2) : ""
+
+// hiển thị lớn / nhỏ
+if(count>0){
+if(avg>=5){
+state.value="LỚN"
+}else{
+state.value="NHỎ"
+}
+}
 
 this.value=""
 this.focus()

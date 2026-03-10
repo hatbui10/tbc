@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Trung bình 5 số</title>
+<title>Trung bình động</title>
 
 <style>
 
@@ -105,6 +105,59 @@ opacity:0.8;
 margin-bottom:6px;
 }
 
+
+.control{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+margin-bottom:20px;
+}
+
+.control label{
+font-size:15px;
+opacity:0.9;
+}
+
+.control input{
+width:70px;
+height:38px;
+border-radius:8px;
+border:none;
+text-align:center;
+font-size:16px;
+background:#0f172a;
+color:#38bdf8;
+box-shadow:0 0 0 1px #334155 inset;
+}
+
+.control input:focus{
+outline:none;
+box-shadow:0 0 0 2px #38bdf8;
+}
+
+.control button{
+padding:9px 18px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+font-size:15px;
+cursor:pointer;
+transition:0.25s;
+}
+
+.control button:hover{
+background:#3b82f6;
+transform:translateY(-1px);
+box-shadow:0 4px 10px rgba(0,0,0,0.4);
+}
+
+
+
+
+
+
 </style>
 </head>
 
@@ -112,43 +165,65 @@ margin-bottom:6px;
 
 <div class="panel">
 
-<h2>Trung bình 5 số</h2>
+<h2>Trung bình động</h2>
 
-<div class="row">
-<input id="o1" readonly>
-<input id="o2" readonly>
-<input id="o3" readonly>
-<input id="o4" readonly>
-<input id="o5" readonly>
+<div class="control">
+
+<label>Số ô trung bình</label>
+
+<input type="number" id="count" value="5" min="2" max="20">
+
+<button onclick="createBoxes()">Tạo</button>
+
 </div>
 
+
+<div id="boxes" class="row"></div>
+
 <div class="row">
-<input id="o6" maxlength="1">
-<input id="kq" class="result" readonly placeholder="TB">
-<input id="state" class="state" readonly>
+<input id="inputBox" maxlength="1" class="box">
+<input id="avg" class="result box" readonly placeholder="TB">
+<input id="state" class="state box" readonly>
 </div>
 
-<div class="label">Dãy số đã rời khỏi ô1</div>
 <textarea id="log"></textarea>
 
 </div>
 
 <script>
 
-const boxes=[
-o1,o2,o3,o4,o5
-]
-
-const input6=document.getElementById("o6")
-const result=document.getElementById("kq")
-const state=document.getElementById("state")
+let boxes=[]
+const container=document.getElementById("boxes")
+const inputBox=document.getElementById("inputBox")
+const avgBox=document.getElementById("avg")
+const stateBox=document.getElementById("state")
 const logBox=document.getElementById("log")
 
-window.onload=()=>{
-input6.focus()
+function createBoxes(){
+
+container.innerHTML=""
+boxes=[]
+
+let n=parseInt(document.getElementById("count").value)
+
+for(let i=0;i<n;i++){
+
+let input=document.createElement("input")
+input.className="box"
+input.readOnly=true
+
+container.appendChild(input)
+boxes.push(input)
+
 }
 
-input6.addEventListener("input",function(){
+inputBox.focus()
+
+}
+
+createBoxes()
+
+inputBox.addEventListener("input",function(){
 
 let v=this.value
 
@@ -159,13 +234,13 @@ return
 
 let removed=boxes[0].value
 
-for(let i=0;i<4;i++){
+for(let i=0;i<boxes.length-1;i++){
 boxes[i].value=boxes[i+1].value
 }
 
-boxes[4].value=v
+boxes[boxes.length-1].value=v
 
-if(removed!==""){
+if(removed!=""){
 logBox.value+=removed
 }
 
@@ -173,26 +248,26 @@ let sum=0
 let count=0
 
 boxes.forEach(b=>{
-if(b.value!==""){
+if(b.value!=""){
 sum+=Number(b.value)
 count++
 }
 })
 
-let avg = count ? (sum/count) : 0
+let avg=count?sum/count:0
 
-result.value = count ? avg.toFixed(2) : ""
+avgBox.value=count?avg.toFixed(2):""
 
-state.classList.remove("lon","nho")
+stateBox.classList.remove("lon","nho")
 
-if(count>0){
+if(count){
 
 if(avg>=5){
-state.value="LỚN"
-state.classList.add("lon")
+stateBox.value="LỚN"
+stateBox.classList.add("lon")
 }else{
-state.value="NHỎ"
-state.classList.add("nho")
+stateBox.value="NHỎ"
+stateBox.classList.add("nho")
 }
 
 }

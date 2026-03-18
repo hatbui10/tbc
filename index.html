@@ -73,6 +73,12 @@ button {
 <textarea id="less" readonly></textarea>
 <button onclick="copy('less')">Copy</button>
 
+  
+<h4>Xuất hiện cả 2 (<span id="countBoth">0</span>)</h4>
+<textarea id="both" readonly></textarea>
+<button onclick="copy('both')">Copy</button>
+
+  
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -156,6 +162,33 @@ sequences = [...new Set(sequences)];
 
   greater = [...new Set(greater)];
 less = [...new Set(less)];
+
+  // Sau khi đã có greater và less (đã lọc trùng trong từng array)
+let both = [];
+
+// Tìm số xuất hiện ở cả 2
+greater.forEach(num => {
+  if (less.includes(num)) {
+    both.push(num);
+  }
+});
+
+// Loại bỏ số trùng khỏi greater và less
+greater = greater.filter(num => !both.includes(num));
+less = less.filter(num => !both.includes(num));
+
+// Loại trùng trong both
+both = [...new Set(both)];
+
+// Gán vào textarea
+document.getElementById("greater").value = greater.join(", ");
+document.getElementById("less").value = less.join(", ");
+document.getElementById("both").value = both.join(", ");
+
+// Cập nhật đếm
+document.getElementById("countGreater").textContent = greater.length;
+document.getElementById("countLess").textContent = less.length;
+document.getElementById("countBoth").textContent = both.length;
   
 
   /* 🔥 FORMAT 20 SỐ / DÒNG */

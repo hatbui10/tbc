@@ -89,7 +89,9 @@ let allNumbers = "";
 function format20(arr) {
   let result = [];
   for (let i = 0; i < arr.length; i += 20) {
-    result.push(arr.slice(i, i + 20).join(", "));
+    // slice 20 số, nối bằng ", " và **thêm dấu , ở cuối**
+    let line = arr.slice(i, i + 20).join(", ") + ",";
+    result.push(line);
   }
   return result.join("\n");
 }
